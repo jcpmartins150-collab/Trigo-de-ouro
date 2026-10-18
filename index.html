@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trigo de Ouro do Jockey</title>
+<meta name="description" content="Padaria e confeitaria Trigo de Ouro do Jockey. Bolos de festa, doces, salgados e pães feitos todo dia. Monte a sua encomenda e combine tudo pelo WhatsApp.">
+<meta name="theme-color" content="#0f2a6e">
+<!-- DEPLOY STEP: trocar og:url e og:image pela URL absoluta do site no ar -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Trigo de Ouro do Jockey">
+<meta property="og:description" content="Bolos, doces e salgados para a sua festa. Encomende pelo WhatsApp.">
+<meta property="og:url" content="https://SEU-DOMINIO/">
+<meta property="og:image" content="https://SEU-DOMINIO/assets/hero-ending.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cellipse cx='32' cy='32' rx='30' ry='22' fill='%23fffaf1' stroke='%23e9a417' stroke-width='3'/%3E%3Cellipse cx='32' cy='32' rx='25' ry='17' fill='none' stroke='%230f2a6e' stroke-width='3'/%3E%3Cpath d='M22 44 Q32 30 42 18' stroke='%23e9a417' stroke-width='3' fill='none'/%3E%3Cg fill='%23f8b016'%3E%3Cellipse cx='38' cy='23' rx='3' ry='6' transform='rotate(40 38 23)'/%3E%3Cellipse cx='33' cy='29' rx='3' ry='6' transform='rotate(40 33 29)'/%3E%3Cellipse cx='28' cy='35' rx='3' ry='6' transform='rotate(40 28 35)'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/figtree-400.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Fraunces";src:url(assets/fonts/fraunces.woff2) format("woff2-variations"),url(assets/fonts/fraunces.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Figtree";src:url(assets/fonts/figtree-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Figtree";src:url(assets/fonts/figtree-600.woff2) format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"DM Mono";src:url(assets/fonts/dm-mono-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"DM Mono";src:url(assets/fonts/dm-mono-500.woff2) format("woff2");font-weight:500;font-style:normal;font-display:swap}
+:root{
+  --canvas:#fbf4e6; --panel:#fffaf1; --panel-2:#f6ead2;
+  --navy:#0f2a6e; --navy-deep:#0a1f55; --text-secondary:#4a5478;
+  --gold:#e9a417; --gold-soft:#f3cf7a; --gold-line:#d99a12;
+  --accent:#c8262b; --accent-hover:#a91d22; --accent-muted:rgba(200,38,43,.14);
+  --line:#e6d6b4; --line-strong:#b9a170;
+  --ease-out:cubic-bezier(.22,1,.36,1); --ease-io:cubic-bezier(.65,0,.35,1);
+  --tshadow:0 1px 2px rgba(20,8,4,.95),0 3px 12px rgba(20,8,4,.78),0 10px 44px rgba(20,8,4,.8);
+  --cream-text:#fff6e6;
+  --display:"Fraunces",Georgia,serif; --body:"Figtree",system-ui,sans-serif; --mono:"DM Mono",ui-monospace,monospace;
+  --radius:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden;overflow-x:clip;scroll-behavior:smooth;background:var(--canvas)}
+body{overflow-x:hidden;overflow-x:clip;background:var(--canvas);color:var(--navy);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;animation:pageIn .9s var(--ease-out) both}
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-variation-settings:"SOFT" 100;font-weight:700;line-height:1.04;letter-spacing:-.015em;color:var(--navy)}
+.skip{position:absolute;left:-999px;top:8px;z-index:100;background:var(--navy);color:var(--panel);padding:10px 16px;border-radius:10px}
+.skip:focus{left:16px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--text-secondary);display:inline-flex;align-items:center;gap:12px}
+.kicker::before,.kicker::after{content:"";width:34px;height:1px;background:var(--gold-line)}
+.pendente{background:repeating-linear-gradient(45deg,rgba(233,164,23,.16) 0 8px,rgba(233,164,23,.06) 8px 16px);border-radius:6px;padding:0 4px}
+
+/* ambiente fixo */
+.ambient{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:var(--canvas)}
+.ambient i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;will-change:transform}
+.ambient i:nth-child(1){width:46vw;height:46vw;left:-10vw;top:10vh;background:#f7dfa6;animation:drift1 84s linear infinite;animation-delay:-20s}
+.ambient i:nth-child(2){width:38vw;height:38vw;right:-8vw;top:50vh;background:#f2d2c0;animation:drift2 96s linear infinite;animation-delay:-41s}
+.ambient i:nth-child(3){width:30vw;height:30vw;left:40vw;top:80vh;background:#dfe3f3;opacity:.45;animation:drift1 110s linear infinite reverse;animation-delay:-63s}
+.ambient::after{content:"";position:absolute;inset:0;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes drift1{0%{transform:translate(0,0)}25%{transform:translate(8vw,6vh)}50%{transform:translate(2vw,14vh)}75%{transform:translate(-6vw,5vh)}100%{transform:translate(0,0)}}
+@keyframes drift2{0%{transform:translate(0,0)}33%{transform:translate(-7vw,-8vh)}66%{transform:translate(4vw,-3vh)}100%{transform:translate(0,0)}}
+
+/* navegação */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px clamp(16px,4vw,56px);transition:background .5s var(--ease-out),box-shadow .5s var(--ease-out),padding .5s var(--ease-out)}
+.nav.solid{background:rgba(251,244,230,.9);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line);padding-top:8px;padding-bottom:8px}
+.nav .brand img{height:64px;width:auto;transition:height .5s var(--ease-out)}
+.nav.solid .brand img{height:50px}
+.nav ul{list-style:none;display:flex;gap:clamp(14px,2.4vw,34px);align-items:baseline}
+.nav ul a{text-decoration:none;font-weight:600;font-size:.98rem;position:relative;padding:6px 0}
+.nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease-out)}
+.nav ul a:hover::after{transform:scaleX(1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--body);font-weight:600;font-size:1rem;text-decoration:none;border:0;cursor:pointer;border-radius:999px;padding:14px 26px;transition:transform .35s var(--ease-out),background .35s var(--ease-out),box-shadow .35s var(--ease-out),color .35s var(--ease-out)}
+.btn-accent{background:var(--accent);color:#fff;box-shadow:0 10px 26px -10px rgba(200,38,43,.7)}
+.btn-accent:hover{background:var(--accent-hover);transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy)}
+.btn-ghost:hover{background:var(--navy);color:var(--panel)}
+.btn svg{width:18px;height:18px;transition:transform .35s var(--ease-out)}
+.btn:hover svg{transform:translateX(4px)}
+.nav .btn{padding:10px 20px}
+@media (pointer:coarse){.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center}}
+@media (max-width:860px){.nav ul{display:none}.nav .brand img{height:52px}}
+
+/* HERO */
+.hero{position:relative;height:450vh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.poster,.stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background-size:cover;background-position:center}
+.stage video{opacity:0;transition:opacity .8s var(--ease-out);will-change:transform;transform:translateZ(0)}
+.stage.video-ready video{opacity:1}
+.stage .wash{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(28,10,4,.78) 0%,rgba(28,10,4,.42) 34%,rgba(28,10,4,0) 58%),linear-gradient(180deg,rgba(20,8,4,.45),rgba(20,8,4,0) 18%),radial-gradient(ellipse 120% 90% at 50% 45%,rgba(20,8,4,0) 45%,rgba(20,8,4,.45) 100%)}
+.bands{position:absolute;inset:0;pointer-events:none}
+.band{position:absolute;left:clamp(16px,6vw,96px);bottom:clamp(40px,9vh,110px);width:min(760px,88vw);opacity:0;text-shadow:var(--tshadow);color:var(--cream-text)}
+.band::before{content:"";position:absolute;inset:-26% -14%;z-index:-1;pointer-events:none;opacity:calc(.3 + .7*var(--k,1));background:radial-gradient(ellipse 74% 62% at 40% 55%,rgba(28,10,4,.66) 0%,rgba(28,10,4,.44) 46%,rgba(28,10,4,0) 76%)}
+.band h1,.band h2{font-size:clamp(2.6rem,5.4vw,5.4rem);color:var(--cream-text)}
+.band p{font-size:clamp(1.05rem,1.4vw,1.3rem);margin-top:18px;max-width:40ch;color:#f6e7cc}
+.band .btn{text-shadow:none;pointer-events:auto}
+.band.on{pointer-events:auto}
+.band .rule{display:flex;align-items:center;gap:12px;margin-top:22px;color:var(--gold-line)}
+.band .rule span{height:1.5px;width:64px;background:currentColor}
+.band .row{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+/* palavras e caracteres */
+.w{display:inline-block;white-space:nowrap}
+.band1 .w{--kc:clamp(0,(var(--k,0) - var(--th,0))*2.8,1);opacity:var(--kc);transform:translateY(calc((1 - var(--kc))*-26px))}
+.band2 .w{--kc:clamp(0,(var(--k,0) - var(--th,0))*3,1);--ks:clamp(0,(var(--k,0) - var(--th,0) - var(--sd,.1))*var(--ss,3.2),1);opacity:var(--kc);transform:scale(calc(.6 + (.4 + var(--ov,.12))*var(--kc) - var(--ov,.12)*var(--ks)))}
+.band2 .w.em{--ov:.24;--sd:.16;--ss:2.6;color:var(--gold-soft)}
+.band .btn-ghost{color:var(--cream-text);box-shadow:inset 0 0 0 2px var(--cream-text)}
+.band .btn-ghost:hover{background:var(--cream-text);color:var(--navy)}
+.band .rule{color:var(--gold)}
+.nav:not(.solid) ul a{color:var(--cream-text);text-shadow:0 1px 8px rgba(20,8,4,.7)}
+.band3 .w{--kc:clamp(0,(var(--k,0) - var(--th,0))*3,1);opacity:var(--kc);transform:translateY(calc((1 - var(--kc))*30px))}
+.band3 .sub{--ks:clamp(0,(var(--k,0) - .62)*4,1);opacity:var(--ks);transform:translateY(calc((1 - var(--ks))*16px))}
+.band3 .row{--kb:clamp(0,(var(--k,0) - .76)*5,1);opacity:var(--kb);transform:translateY(calc((1 - var(--kb))*16px))}
+.band1 .sub{--ks:clamp(0,(var(--k,0) - .5)*3,1);opacity:var(--ks)}
+.ring{position:absolute;right:clamp(16px,4vw,48px);bottom:28px;width:44px;height:44px;color:var(--cream-text);transform:rotate(-90deg);transition:opacity .6s var(--ease-out)}
+.ring circle.bg{opacity:.18}
+.stage.video-ready .ring{opacity:0}
+.cue{position:absolute;right:clamp(80px,9vw,140px);bottom:30px;font-family:var(--mono);font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-text);display:flex;flex-direction:column;align-items:center;gap:8px;text-shadow:var(--tshadow);transition:opacity .6s var(--ease-out)}
+.cue::after{content:"";width:2px;height:34px;background:linear-gradient(var(--cream-text),transparent);animation:cue 2.6s var(--ease-io) infinite;animation-delay:-.8s;transform-origin:top}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.stage.scrolled .cue{opacity:0}
+@media (max-height:560px){.cue,.ring{display:none}}
+
+/* hero estático: os cinco portões */
+@media (max-width:720px),(orientation:portrait) and (max-width:1024px),(orientation:portrait) and (pointer:coarse),(orientation:landscape) and (pointer:coarse) and (max-height:560px),(prefers-reduced-motion:reduce){
+  .hero{height:auto}
+  .stage{position:relative;height:auto;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;background:var(--canvas)}
+  .stage video,.ring,.cue,.band1,.band2{display:none}
+  .poster{position:relative;inset:auto;height:58svh;min-height:340px;background-image:url("assets/hero-ending.jpg");background-position:center 40%;-webkit-mask-image:linear-gradient(#000 72%,transparent);mask-image:linear-gradient(#000 72%,transparent)}
+  .stage .wash{display:none}
+  .bands{position:relative;inset:auto}
+  .band3{position:relative;left:auto;bottom:auto;opacity:1;width:auto;padding:0 20px 56px;margin-top:-60px;color:var(--navy);text-shadow:none}
+  .band3::before{display:none}
+  .band3 h1{color:var(--navy)}
+  .band3 p{color:var(--text-secondary)}
+  .band3 .rule{color:var(--gold-line)}
+  .band3 .btn-ghost{color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy)}
+  .nav:not(.solid) ul a{color:var(--navy);text-shadow:none}
+  .band3 .w,.band3 .sub,.band3 .row{opacity:1;transform:none}
+  .band3 h1{font-size:clamp(2.4rem,10vw,3.6rem)}
+}
+
+/* letreiro */
+.ticker{position:relative;background:var(--navy);color:var(--panel);overflow:hidden;padding:16px 0;transform:rotate(-1.2deg);margin:-10px -20px 0}
+.ticker .track{display:flex;width:max-content;animation:tick 48s linear infinite;animation-delay:-12s}
+.ticker span{font-family:var(--display);font-variation-settings:"SOFT" 100;font-weight:600;font-size:1.35rem;white-space:nowrap;padding:0 26px;display:inline-flex;align-items:center;gap:52px}
+.ticker span::after{content:"";width:12px;height:12px;border-radius:50% 50% 50% 0;background:var(--gold);transform:rotate(-45deg)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* seções */
+section{position:relative}
+.wrap{width:min(1240px,100% - 32px);margin:0 auto}
+.sec{padding:clamp(80px,11vw,150px) 0}
+.head{text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px}
+.head h2{font-size:clamp(2.3rem,5vw,4.1rem);max-width:16ch}
+.head p{color:var(--text-secondary);max-width:52ch;font-size:1.1rem}
+.sprig{width:150px;height:34px;color:var(--gold-line)}
+.sprig path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-dasharray:var(--len,300);stroke-dashoffset:var(--len,300);transition:stroke-dashoffset 1.6s var(--ease-out)}
+.sprig .grain{fill:var(--gold);stroke:none;opacity:0;transform:scale(.4);transform-box:fill-box;transform-origin:center;transition:opacity .6s var(--ease-out),transform .6s var(--ease-out)}
+.in .sprig path{stroke-dashoffset:0}
+.in .sprig .grain{opacity:1;transform:scale(1)}
+.in .sprig .grain:nth-of-type(2){transition-delay:.5s}.in .sprig .grain:nth-of-type(3){transition-delay:.6s}.in .sprig .grain:nth-of-type(4){transition-delay:.7s}.in .sprig .grain:nth-of-type(5){transition-delay:.8s}.in .sprig .grain:nth-of-type(6){transition-delay:.9s}.in .sprig .grain:nth-of-type(7){transition-delay:1s}
+
+/* entradas */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
+.in .rv,.rv.in{opacity:1;transform:none}
+
+/* bolos */
+.cakes{display:grid;grid-template-columns:repeat(12,1fr);gap:22px;margin-top:64px}
+.cake{grid-column:span 3;background:var(--panel);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 0 var(--line),0 18px 40px -26px rgba(15,42,110,.35);display:flex;flex-direction:column}
+.cake.big{grid-column:span 6;grid-row:span 2}
+.cake figure{overflow:hidden;aspect-ratio:4/5;position:relative}
+.cake.big figure{aspect-ratio:auto;flex:1;min-height:420px}
+.cake.big img{object-position:center 82%}
+.cake img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease-out)}
+.cake:hover img{transform:scale(1.05)}
+.cake .info{padding:18px 20px 22px;display:flex;flex-direction:column;gap:6px}
+.cake h3{font-size:1.32rem}
+.cake p{color:var(--text-secondary);font-size:.96rem;line-height:1.5}
+.cake .pick{margin-top:10px;align-self:flex-start;background:none;border:0;cursor:pointer;font:600 .95rem var(--body);color:var(--navy);display:inline-flex;gap:8px;align-items:center;padding:6px 0;border-bottom:2px solid var(--gold)}
+.cake .pick:hover{color:var(--accent);border-color:var(--accent)}
+.cake .tag{position:absolute;left:16px;top:16px;font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;background:rgba(255,250,241,.92);color:var(--navy);padding:6px 10px;border-radius:999px}
+.cakes .cake.rv:nth-child(2){transition-delay:.08s}.cakes .cake.rv:nth-child(3){transition-delay:.16s}.cakes .cake.rv:nth-child(4){transition-delay:.24s}.cakes .cake.rv:nth-child(5){transition-delay:.32s}.cakes .cake.rv:nth-child(6){transition-delay:.12s}.cakes .cake.rv:nth-child(7){transition-delay:.2s}
+.cakes.done .cake.rv:nth-child(n){transition-delay:0s}
+@media (max-width:980px){.cake{grid-column:span 6}.cake.big{grid-column:span 12;grid-row:auto}.cake.big figure{min-height:0;aspect-ratio:4/3}}
+@media (max-width:560px){.cakes{gap:14px}.cake{grid-column:span 12}}
+
+/* doces e pães: faixa dupla */
+.sweet{background:var(--navy);color:var(--panel);border-radius:clamp(28px,4vw,56px);margin:0 clamp(8px,1.5vw,20px);overflow:hidden}
+.sweet .grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(30px,5vw,80px);align-items:center}
+.sweet h2{color:var(--panel);font-size:clamp(2.3rem,4.6vw,3.9rem)}
+.sweet .kicker{color:var(--gold-soft)}
+.sweet .kicker::before{background:var(--gold)}
+.sweet .kicker::after{display:none}
+.sweet p.lead{color:#d6dcf0;margin-top:20px;max-width:40ch;font-size:1.1rem}
+.sweet ul.list{list-style:none;margin-top:30px;display:grid;gap:0}
+.sweet ul.list li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid rgba(243,207,122,.28)}
+.sweet ul.list b{font-family:var(--display);font-variation-settings:"SOFT" 100;font-weight:600;font-size:1.25rem}
+.sweet ul.list small{font-family:var(--mono);font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-soft)}
+.reels{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:min(760px,92vh);overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent)}
+.reel{display:flex;flex-direction:column;gap:16px;animation:reelUp 60s linear infinite;animation-delay:-14s}
+.reel.down{animation-name:reelDown;animation-delay:-37s}
+.reel figure{border-radius:18px;overflow:hidden;aspect-ratio:4/5;flex:none;position:relative}
+.reel img{width:100%;height:100%;object-fit:cover}
+.reel figcaption{position:absolute;left:12px;bottom:12px;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;background:rgba(10,31,85,.78);color:var(--panel);padding:6px 10px;border-radius:999px}
+@keyframes reelUp{to{transform:translateY(-50%)}}
+@keyframes reelDown{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+.reels:hover .reel{animation-play-state:paused}
+@media (max-width:900px){.sweet .grid{grid-template-columns:1fr}.reels{height:560px}}
+
+/* calculadora */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,5vw,80px);align-items:center;margin-top:60px}
+.calc-art{position:relative;background:var(--panel);border-radius:32px;box-shadow:0 1px 0 var(--line),0 30px 60px -40px rgba(15,42,110,.45);aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden}
+.calc-art svg{width:84%;height:auto;overflow:visible}
+.berry{transform-box:fill-box;transform-origin:center bottom;transition:transform .8s var(--ease-out),opacity .5s var(--ease-out)}
+.berry.off{opacity:0;transform:translateY(-140px) rotate(-30deg)}
+.calc-panel label{display:block;font-family:var(--mono);font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-secondary)}
+.guests{display:flex;align-items:baseline;gap:14px;margin:6px 0 18px}
+.guests output{font-family:var(--display);font-variation-settings:"SOFT" 100;font-weight:700;font-size:clamp(4rem,9vw,7rem);line-height:1;color:var(--navy)}
+.guests span{font-size:1.2rem;color:var(--text-secondary)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:999px;background:linear-gradient(90deg,var(--gold) var(--fill,30%),var(--line) var(--fill,30%));outline-offset:6px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:34px;height:34px;border-radius:50%;background:var(--accent);border:4px solid var(--panel);box-shadow:0 4px 14px rgba(200,38,43,.45)}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--accent);border:4px solid var(--panel);box-shadow:0 4px 14px rgba(200,38,43,.45)}
+.results{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.results div{background:var(--panel);border-radius:18px;padding:18px 16px;box-shadow:0 1px 0 var(--line)}
+.results b{display:block;font-family:var(--display);font-variation-settings:"SOFT" 100;font-size:2rem;line-height:1.1}
+.results small{font-size:.9rem;color:var(--text-secondary)}
+.calc-note{font-size:.92rem;color:var(--text-secondary);margin-top:16px;max-width:52ch}
+.calc-panel .btn{margin-top:26px}
+@media (max-width:900px){.calc{grid-template-columns:1fr}.calc-art{max-width:460px;width:100%;margin:0 auto}}
+@media (max-width:480px){.results{grid-template-columns:1fr}}
+
+/* passos */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:70px;counter-reset:s;position:relative}
+.steps::before{content:"";position:absolute;top:58px;left:16%;right:16%;height:2px;background:repeating-linear-gradient(90deg,var(--gold) 0 10px,transparent 10px 20px)}
+.step{text-align:center;padding:0 clamp(10px,2.4vw,34px);display:flex;flex-direction:column;align-items:center;gap:14px}
+.step .ic{width:116px;height:116px;border-radius:50%;background:var(--panel);box-shadow:0 0 0 8px var(--canvas),0 0 0 9px var(--line);display:grid;place-items:center;position:relative;z-index:1}
+.step .ic svg{width:54px;height:54px;color:var(--navy)}
+.step .ic::after{counter-increment:s;content:counter(s);position:absolute;top:-4px;right:-4px;width:34px;height:34px;border-radius:50%;background:var(--gold);color:var(--navy);font:500 .9rem var(--mono);display:grid;place-items:center}
+.step h3{font-size:1.5rem;margin-top:8px}
+.step p{color:var(--text-secondary);max-width:30ch}
+.steps .step.rv:nth-child(2){transition-delay:.12s}.steps .step.rv:nth-child(3){transition-delay:.24s}
+@media (max-width:820px){.steps{grid-template-columns:1fr;gap:46px}.steps::before{display:none}}
+
+/* loja */
+.store{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:0;background:var(--panel);border-radius:clamp(26px,3vw,40px);overflow:hidden;box-shadow:0 1px 0 var(--line),0 30px 60px -44px rgba(15,42,110,.5)}
+.store figure{min-height:420px}
+.store img{width:100%;height:100%;object-fit:cover}
+.store .txt{padding:clamp(28px,4vw,60px);display:flex;flex-direction:column;gap:18px;justify-content:center}
+.store h2{font-size:clamp(2rem,3.6vw,3rem)}
+.store dl{display:grid;gap:14px;margin-top:6px}
+.store dt{font-family:var(--mono);font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-secondary)}
+.store dd{font-size:1.08rem;font-weight:600}
+@media (max-width:900px){.store{grid-template-columns:1fr}.store figure{min-height:0;aspect-ratio:4/3}}
+
+/* perguntas */
+.faq{max-width:820px;margin:56px auto 0}
+.faq details{border-bottom:1px solid var(--line-strong)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px 4px;font-family:var(--display);font-variation-settings:"SOFT" 100;font-weight:600;font-size:clamp(1.2rem,2vw,1.5rem)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{flex:none;width:30px;height:30px;border-radius:50%;background:var(--panel);box-shadow:inset 0 0 0 1.5px var(--line-strong);position:relative;transition:transform .45s var(--ease-out),background .45s var(--ease-out)}
+.faq summary i::before,.faq summary i::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;background:var(--navy);transform:translate(-50%,-50%)}
+.faq summary i::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .45s var(--ease-out)}
+.faq details[open] summary i{background:var(--gold-soft)}
+.faq details[open] summary i::after{transform:translate(-50%,-50%) rotate(0)}
+.faq .ans{padding:0 4px 26px;color:var(--text-secondary);max-width:64ch;font-size:1.04rem}
+
+/* encomenda */
+.order{background:var(--navy);color:var(--panel);border-radius:clamp(28px,4vw,56px);margin:0 clamp(8px,1.5vw,20px);overflow:hidden;position:relative}
+.order .grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(30px,5vw,80px)}
+.order h2{color:var(--panel);font-size:clamp(2.4rem,5vw,4.2rem)}
+.order .kicker{color:var(--gold-soft)}.order .kicker::before{background:var(--gold)}.order .kicker::after{display:none}
+.order .lead{color:#d6dcf0;margin-top:20px;max-width:38ch;font-size:1.1rem}
+.order .big-sprig{width:min(320px,70%);height:auto;margin-top:40px;color:var(--gold)}
+.order .big-sprig path{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600);transition:stroke-dashoffset 2.4s var(--ease-out)}
+.order.in .big-sprig path{stroke-dashoffset:0}
+form{background:var(--panel);color:var(--navy);border-radius:28px;padding:clamp(22px,3vw,40px);display:grid;grid-template-columns:1fr 1fr;gap:18px 18px}
+.f{display:flex;flex-direction:column;gap:8px}
+.f.full{grid-column:1/-1}
+.f label,.f legend{font-family:var(--mono);font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-secondary)}
+.f input,.f textarea,.f select{font:400 1rem var(--body);color:var(--navy);background:var(--canvas);border:1.5px solid var(--line-strong);border-radius:14px;padding:13px 14px;transition:border-color .3s var(--ease-out),box-shadow .3s var(--ease-out);width:100%}
+.f input:focus,.f textarea:focus,.f select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 4px rgba(15,42,110,.12)}
+.f textarea{min-height:110px;resize:vertical}
+fieldset.f{border:0}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chips label{font:600 .96rem var(--body);letter-spacing:0;text-transform:none;color:var(--navy);display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--canvas);box-shadow:inset 0 0 0 1.5px var(--line-strong);cursor:pointer;transition:background .3s var(--ease-out),box-shadow .3s var(--ease-out),color .3s var(--ease-out)}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label:has(input:checked){background:var(--navy);color:var(--panel);box-shadow:none}
+.chips label:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+form .btn{grid-column:1/-1;justify-self:start;margin-top:6px}
+.form-note{grid-column:1/-1;font-size:.9rem;color:var(--text-secondary)}
+.ok{grid-column:1/-1;display:none;background:#eef3e6;border-radius:16px;padding:16px 18px;color:#24451c;font-weight:600}
+form.sent .ok{display:block}
+@media (max-width:900px){.order .grid{grid-template-columns:1fr}.order .big-sprig{display:none}}
+@media (max-width:560px){form{grid-template-columns:1fr}}
+
+/* rodapé */
+footer{padding:80px 0 46px}
+.foot{display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:center}
+.foot img{height:92px;width:auto}
+.foot p{color:var(--text-secondary);font-size:.96rem}
+.foot nav{display:flex;gap:22px;flex-wrap:wrap}
+.foot nav a{font-weight:600;text-decoration:none;border-bottom:2px solid var(--gold)}
+.fine{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary)}
+@media (max-width:820px){.foot{grid-template-columns:1fr;text-align:center;justify-items:center}}
+
+
+/* pausas */
+.off-screen,.off-screen *{animation-play-state:paused!important}
+body.paused *,body.paused *::before,body.paused *::after{animation-play-state:paused!important}
+
+/* movimento reduzido */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important;transition-delay:0s!important}
+  .rv{opacity:1;transform:none}
+  .sprig path,.big-sprig path{stroke-dashoffset:0!important}
+  .sprig .grain{opacity:1;transform:none}
+  .berry.off{opacity:0}
+  .reels{height:auto;-webkit-mask-image:none;mask-image:none}
+  .reel.down{display:none}.reels{grid-template-columns:1fr 1fr}
+  .reel{display:grid;grid-template-columns:1fr 1fr;grid-column:1/-1}
+  .ticker .track{transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Pular para o conteúdo</a>
+<div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#topo" aria-label="Trigo de Ouro do Jockey, início"><img src="assets/logo.webp" alt="Trigo de Ouro do Jockey" width="480" height="301"></a>
+  <nav aria-label="Principal">
+    <ul>
+      <li><a href="#bolos">Bolos</a></li>
+      <li><a href="#doces">Doces e pães</a></li>
+      <li><a href="#calculadora">Calculadora</a></li>
+      <li><a href="#perguntas">Perguntas</a></li>
+    </ul>
+  </nav>
+  <a class="btn btn-accent" href="#encomenda">Encomendar</a>
+</header>
+
+<main id="main" tabindex="-1">
+<section class="hero" id="topo" aria-label="Apresentação">
+  <div class="stage" id="stage">
+    <div class="poster" aria-hidden="true"></div>
+    <video id="hero" preload="none" muted playsinline aria-hidden="true" tabindex="-1"></video>
+    <div class="wash" aria-hidden="true"></div>
+    <div class="bands">
+      <div class="band band1" data-a="0" data-b="0.3">
+        <h2 class="split" data-seed="7">Tem festa chegando?</h2>
+        <p class="sub">Bolos, doces e salgados feitos todo dia aqui no Jockey, do jeito que a sua família gosta.</p>
+      </div>
+      <div class="band band2" data-a="0.34" data-b="0.64">
+        <h2 class="split" data-seed="21" data-em="lugar,certo.">Cada detalhe cai no lugar certo.</h2>
+      </div>
+      <div class="band band3" data-a="0.7" data-b="1">
+        <h1 class="split" data-seed="3">Encomende o bolo da sua festa.</h1>
+        <div class="rule sub" aria-hidden="true"><span></span><svg width="26" height="14" viewBox="0 0 26 14"><path d="M1 13 Q13 7 25 1" stroke="currentColor" fill="none" stroke-width="1.5"/><g fill="#f8b016"><ellipse cx="9" cy="8" rx="2" ry="4" transform="rotate(60 9 8)"/><ellipse cx="15" cy="5" rx="2" ry="4" transform="rotate(60 15 5)"/><ellipse cx="21" cy="2.5" rx="2" ry="4" transform="rotate(60 21 2.5)"/></g></svg><span></span></div>
+        <p class="sub">Escolha, combine tudo pelo WhatsApp e busque no dia, fresquinho.</p>
+        <div class="row">
+          <a class="btn btn-accent" href="#encomenda">Montar minha encomenda <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="#bolos">Ver os bolos</a>
+        </div>
+      </div>
+    </div>
+    <svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle class="bg" cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="126" style="stroke-dashoffset:var(--ld,126)"/></svg>
+    <div class="cue" aria-hidden="true">Role devagar</div>
+  </div>
+</section>
+
+<div class="ticker live" aria-hidden="true"><div class="track">
+  <span>Feito aqui todo dia</span><span>Bolo igual à foto</span><span>Salgado quentinho</span><span>Pedido confirmado no WhatsApp</span><span>Pronto na hora combinada</span>
+  <span>Feito aqui todo dia</span><span>Bolo igual à foto</span><span>Salgado quentinho</span><span>Pedido confirmado no WhatsApp</span><span>Pronto na hora combinada</span>
+  <span>Feito aqui todo dia</span><span>Bolo igual à foto</span><span>Salgado quentinho</span><span>Pedido confirmado no WhatsApp</span><span>Pronto na hora combinada</span>
+  <span>Feito aqui todo dia</span><span>Bolo igual à foto</span><span>Salgado quentinho</span><span>Pedido confirmado no WhatsApp</span><span>Pronto na hora combinada</span>
+</div></div>
+
+<section class="sec" id="bolos">
+  <div class="wrap">
+    <div class="head io">
+      <span class="kicker">Da nossa vitrine</span>
+      <h2 class="rv">O bolo que vira assunto da festa.</h2>
+      <svg class="sprig" viewBox="0 0 150 34" aria-hidden="true"><path d="M2 17 H62 M88 17 H148"/><path d="M64 26 Q75 17 86 8"/><ellipse class="grain" cx="70" cy="20" rx="2.4" ry="5" transform="rotate(55 70 20)"/><ellipse class="grain" cx="75" cy="16" rx="2.4" ry="5" transform="rotate(55 75 16)"/><ellipse class="grain" cx="80" cy="12.5" rx="2.4" ry="5" transform="rotate(55 80 12.5)"/><ellipse class="grain" cx="74" cy="22.5" rx="2.4" ry="5" transform="rotate(-35 74 22.5)"/><ellipse class="grain" cx="79" cy="18.5" rx="2.4" ry="5" transform="rotate(-35 79 18.5)"/><ellipse class="grain" cx="84" cy="14.5" rx="2.4" ry="5" transform="rotate(-35 84 14.5)"/></svg>
+      <p class="rv">Todos estes saíram da nossa cozinha. Escolha um modelo, peça do seu jeito, ou mande uma foto que a gente conversa.</p>
+    </div>
+    <div class="cakes io" id="cakes">
+      <article class="cake big rv"><figure><img src="assets/bolo-loja.webp" alt="Bolo com cobertura de chocolate escorrendo, morangos e gotas de chocolate branco, sobre o balcão da padaria" loading="lazy" width="960" height="1200"><span class="tag">O mais pedido</span></figure><div class="info"><h3>Chocolate com morango</h3><p>Ganache brilhante escorrendo, recheio cremoso e morangos frescos por cima.</p><button class="pick" data-cake="Chocolate com morango">Quero este</button></div></article>
+      <article class="cake rv"><figure><img src="assets/bolo-morango.webp" alt="Bolo branco coberto com calda vermelha de morango e morangos inteiros no topo" loading="lazy" width="960" height="1200"></figure><div class="info"><h3>Morango com leite condensado</h3><p>Calda de morango, massa branca e muito recheio.</p><button class="pick" data-cake="Morango com leite condensado">Quero este</button></div></article>
+      <article class="cake rv"><figure><img src="assets/bolo-marshmallow.webp" alt="Bolo branco com calda rosa, suspiros e marshmallows coloridos" loading="lazy" width="960" height="1200"></figure><div class="info"><h3>Festa colorida</h3><p>Suspiro, marshmallow e calda rosa. A criançada ama.</p><button class="pick" data-cake="Festa colorida com marshmallow">Quero este</button></div></article>
+      <article class="cake rv"><figure><img src="assets/bolo-trufado.webp" alt="Bolo de chocolate coberto de granulado, com morangos, biscoitos e rosetas de chocolate" loading="lazy" width="960" height="1200"></figure><div class="info"><h3>Trufado com morango</h3><p>Granulado de ponta a ponta, rosetas e morangos.</p><button class="pick" data-cake="Trufado com morango">Quero este</button></div></article>
+      <article class="cake rv"><figure><img src="assets/bolo-profiterole.webp" alt="Bolo de chocolate com profiteroles cobertos de chocolate e physalis" loading="lazy" width="960" height="1200"></figure><div class="info"><h3>Profiterole</h3><p>Carolinas recheadas cobertas de chocolate em cima da ganache.</p><button class="pick" data-cake="Profiterole">Quero este</button></div></article>
+      <article class="cake rv"><figure><img src="assets/red-velvet.webp" alt="Bolo red velvet com cobertura branca desenhada em chocolate e um morango no centro" loading="lazy" width="960" height="1200"></figure><div class="info"><h3>Red velvet</h3><p>Massa vermelha macia e cobertura branca desenhada à mão.</p><button class="pick" data-cake="Red velvet">Quero este</button></div></article>
+      <article class="cake rv"><figure><img src="assets/bolo-chocolate-tortinhas.webp" alt="Dois bolos de chocolate com morangos, biscoitos recheados ao redor e laço vermelho" loading="lazy" width="960" height="1200"></figure><div class="info"><h3>Chocolate de festa</h3><p>Biscoito ao redor, laço no pacote e morango no topo.</p><button class="pick" data-cake="Chocolate de festa com biscoitos">Quero este</button></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec sweet io" id="doces">
+  <div class="wrap grid">
+    <div>
+      <span class="kicker">Para completar a mesa</span>
+      <h2 class="rv" style="margin-top:18px">Doce, salgado e aquele pão de toda manhã.</h2>
+      <p class="lead rv">A festa não vive só de bolo. Monte a mesa com o que sai do nosso forno todo dia.</p>
+      <ul class="list rv">
+        <li><b>Salgados folhados</b><small>Presunto, queijo e ervas</small></li>
+        <li><b>Sonhos</b><small>Creme e doce de leite</small></li>
+        <li><b>Tranças doces</b><small>Goiabada ou frutas</small></li>
+        <li><b>Tortinhas</b><small>Morango e limão</small></li>
+        <li><b>Bolo de pote</b><small>Para lembrancinha</small></li>
+        <li><b>Bolo de amendoim</b><small>Caramelado, de vó</small></li>
+      </ul>
+    </div>
+    <div class="reels live" aria-hidden="true">
+      <div class="reel">
+        <figure><img src="assets/salgados.webp" alt="" loading="lazy"><figcaption>Salgados</figcaption></figure>
+        <figure><img src="assets/sonhos.webp" alt="" loading="lazy"><figcaption>Sonhos</figcaption></figure>
+        <figure><img src="assets/tranca-goiabada.webp" alt="" loading="lazy"><figcaption>Trança de goiabada</figcaption></figure>
+        <figure><img src="assets/tortinhas.webp" alt="" loading="lazy"><figcaption>Tortinhas</figcaption></figure>
+        <figure><img src="assets/salgados.webp" alt="" loading="lazy"><figcaption>Salgados</figcaption></figure>
+        <figure><img src="assets/sonhos.webp" alt="" loading="lazy"><figcaption>Sonhos</figcaption></figure>
+        <figure><img src="assets/tranca-goiabada.webp" alt="" loading="lazy"><figcaption>Trança de goiabada</figcaption></figure>
+        <figure><img src="assets/tortinhas.webp" alt="" loading="lazy"><figcaption>Tortinhas</figcaption></figure>
+      </div>
+      <div class="reel down">
+        <figure><img src="assets/croissant-chocolate.webp" alt="" loading="lazy"><figcaption>Croissant de chocolate</figcaption></figure>
+        <figure><img src="assets/bolo-de-pote.webp" alt="" loading="lazy"><figcaption>Bolo de pote</figcaption></figure>
+        <figure><img src="assets/tranca-frutas.webp" alt="" loading="lazy"><figcaption>Trança de frutas</figcaption></figure>
+        <figure><img src="assets/bolo-amendoim.webp" alt="" loading="lazy"><figcaption>Bolo de amendoim</figcaption></figure>
+        <figure><img src="assets/folhados.webp" alt="" loading="lazy"><figcaption>Folhados</figcaption></figure>
+        <figure><img src="assets/croissant-chocolate.webp" alt="" loading="lazy"><figcaption>Croissant de chocolate</figcaption></figure>
+        <figure><img src="assets/bolo-de-pote.webp" alt="" loading="lazy"><figcaption>Bolo de pote</figcaption></figure>
+        <figure><img src="assets/tranca-frutas.webp" alt="" loading="lazy"><figcaption>Trança de frutas</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="calculadora">
+  <div class="wrap">
+    <div class="head io">
+      <span class="kicker">Calculadora da festa</span>
+      <h2 class="rv">Quanto pedir para ninguém ficar sem?</h2>
+      <svg class="sprig" viewBox="0 0 150 34" aria-hidden="true"><path d="M2 17 H62 M88 17 H148"/><path d="M64 26 Q75 17 86 8"/><ellipse class="grain" cx="70" cy="20" rx="2.4" ry="5" transform="rotate(55 70 20)"/><ellipse class="grain" cx="75" cy="16" rx="2.4" ry="5" transform="rotate(55 75 16)"/><ellipse class="grain" cx="80" cy="12.5" rx="2.4" ry="5" transform="rotate(55 80 12.5)"/><ellipse class="grain" cx="74" cy="22.5" rx="2.4" ry="5" transform="rotate(-35 74 22.5)"/><ellipse class="grain" cx="79" cy="18.5" rx="2.4" ry="5" transform="rotate(-35 79 18.5)"/><ellipse class="grain" cx="84" cy="14.5" rx="2.4" ry="5" transform="rotate(-35 84 14.5)"/></svg>
+      <p class="rv">Arraste e veja os morangos caírem no bolo. A conta sai na hora.</p>
+    </div>
+    <div class="calc io">
+      <div class="calc-art rv" aria-hidden="true">
+        <svg viewBox="0 0 400 360" id="cakeSvg">
+          <ellipse cx="200" cy="318" rx="170" ry="26" fill="#e6d6b4"/>
+          <ellipse cx="200" cy="304" rx="160" ry="24" fill="#fff" stroke="#d9c79f" stroke-width="2"/>
+          <path d="M70 170 V290 Q200 330 330 290 V170 Z" fill="#fffaf1" stroke="#e6d6b4" stroke-width="2"/>
+          <path d="M70 200 Q200 240 330 200" stroke="#f0e2c4" stroke-width="3" fill="none"/><path d="M70 236 Q200 276 330 236" stroke="#f0e2c4" stroke-width="3" fill="none"/>
+          <path d="M70 168 Q200 208 330 168 V186 Q322 214 314 188 Q306 236 296 196 Q284 216 270 200 Q256 246 244 204 Q230 224 214 208 Q200 240 188 208 Q172 226 158 204 Q146 238 132 200 Q118 220 106 196 Q96 230 88 190 Q78 210 70 186 Z" fill="#5a2f1b"/>
+          <ellipse cx="200" cy="168" rx="130" ry="38" fill="#6b3a22"/>
+          <ellipse cx="170" cy="158" rx="60" ry="10" fill="#8a5233" opacity=".55"/>
+          <g id="berries"></g>
+        </svg>
+      </div>
+      <div class="calc-panel rv">
+        <label for="g">Convidados</label>
+        <div class="guests"><output id="gOut" for="g">40</output><span>pessoas</span></div>
+        <input type="range" id="g" min="10" max="150" step="5" value="40" aria-describedby="calcNote">
+        <div class="results" aria-live="polite">
+          <div><b id="rS">400</b><small>salgados</small></div>
+          <div><b id="rB">4 kg</b><small>de bolo</small></div>
+          <div><b id="rD">160</b><small>docinhos</small></div>
+        </div>
+        <p class="calc-note" id="calcNote">Conta de referência: 10 salgados, 100 g de bolo e 4 docinhos por pessoa. Festa infantil ou à tarde costuma pedir um pouco menos. A gente confirma com você no WhatsApp.</p>
+        <a class="btn btn-accent" href="#encomenda" id="useCalc">Usar essa conta na encomenda <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="como" style="padding-top:0">
+  <div class="wrap">
+    <div class="head io">
+      <span class="kicker">Como encomendar</span>
+      <h2 class="rv">Três passos e a festa está garantida.</h2>
+    </div>
+    <div class="steps io">
+      <div class="step rv"><div class="ic"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 30h32v10H8z"/><path d="M10 30v-6q14 6 28 0v6"/><path d="M24 18v-6"/><path d="M24 8q2 2 0 4q-2-2 0-4z"/></svg></div><h3>Escolha</h3><p>Um bolo da vitrine, os salgados e os doces. Ou mande a foto do que você imaginou.</p></div>
+      <div class="step rv"><div class="ic"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 6a17 17 0 0 0-14.7 25.5L7 41l9.7-2.3A17 17 0 1 0 24 6z"/><path d="M17 20q0 9 11 12l3-3-4-2-2 2q-4-2-5-5l2-2-2-4z"/></svg></div><h3>Combine</h3><p>Você manda o pedido pelo WhatsApp. A gente confirma sabor, tamanho, valor e horário.</p></div>
+      <div class="step rv"><div class="ic"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 18h32l-3 22H11z"/><path d="M17 18v-4a7 7 0 0 1 14 0v4"/><path d="M19 29l4 4 7-8"/></svg></div><h3>Busque</h3><p>No dia e na hora combinados, tudo pronto e fresquinho esperando por você.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0" aria-labelledby="lojaT">
+  <div class="wrap">
+    <div class="store io rv">
+      <figure><img src="assets/vitrine.webp" alt="Vitrine da padaria com biscoitos em potes, pudins, doces e bolos decorados" loading="lazy" width="1800" height="1350"></figure>
+      <div class="txt">
+        <span class="kicker" style="justify-content:flex-start">Venha ver de perto</span>
+        <h2 id="lojaT">A vitrine muda todo dia.</h2>
+        <p style="color:var(--text-secondary)">Passe aqui para provar, escolher o sabor e conhecer a equipe que faz o seu bolo.</p>
+        <dl>
+          <div><dt>Endereço</dt><dd><span class="pendente" data-fill="endereco">Endereço da padaria</span></dd></div>
+          <div><dt>Horário</dt><dd><span class="pendente" data-fill="horario">Horário de funcionamento</span></dd></div>
+          <div><dt>WhatsApp</dt><dd><a class="pendente" data-fill="whats-texto" href="#encomenda">(00) 00000-0000</a></dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="perguntas" style="padding-top:0">
+  <div class="wrap">
+    <div class="head io">
+      <span class="kicker">Perguntas de quem já encomendou</span>
+      <h2 class="rv">Antes de você perguntar.</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Com quanto tempo de antecedência eu encomendo?<i aria-hidden="true"></i></summary><div class="ans">Peça com pelo menos <span class="pendente" data-fill="prazo">2 dias</span> de antecedência. Para festas grandes ou bolos personalizados, quanto antes melhor. Se for para amanhã, chama no WhatsApp que a gente vê o que dá para fazer.</div></details>
+      <details><summary>O bolo sai igual à foto?<i aria-hidden="true"></i></summary><div class="ans">As fotos deste site são de bolos que fizemos de verdade. Quando você escolhe um modelo, a gente confirma cada detalhe com você antes de começar, para não ter surpresa no dia.</div></details>
+      <details><summary>Os salgados chegam quentinhos?<i aria-hidden="true"></i></summary><div class="ans">Os salgados saem do forno pouco antes do horário que você marcou para buscar. Por isso o horário combinado é tão importante para a gente.</div></details>
+      <details><summary>Quantos salgados eu peço por convidado?<i aria-hidden="true"></i></summary><div class="ans">Uma boa conta é 10 salgados por pessoa numa festa à noite, e um pouco menos à tarde ou em festa infantil. A <a href="#calculadora">calculadora da festa</a> faz a conta para você.</div></details>
+      <details><summary>Dá para escrever o nome no bolo?<i aria-hidden="true"></i></summary><div class="ans">Dá. Escreva no campo de observações o nome, a idade ou a frase que você quer, e a gente confirma o modelo no WhatsApp.</div></details>
+    </div>
+  </div>
+</section>
+
+<section class="sec order io" id="encomenda">
+  <div class="wrap grid">
+    <div>
+      <span class="kicker">Encomenda</span>
+      <h2 class="rv" style="margin-top:18px">Conta pra gente como vai ser a festa.</h2>
+      <p class="lead rv">Preencha o que souber. Ao enviar, o WhatsApp abre com o seu pedido já escrito para a padaria. A gente responde e confirma tudo com você.</p>
+      <svg class="big-sprig" viewBox="0 0 320 200" aria-hidden="true"><path d="M20 190 Q120 130 300 20"/><path d="M110 138 q-10-28 6-52 q8 26-6 52z"/><path d="M110 138 q28 6 50-12 q-28-8-50 12z"/><path d="M160 108 q-10-28 6-52 q8 26-6 52z"/><path d="M160 108 q28 6 50-12 q-28-8-50 12z"/><path d="M210 78 q-10-28 6-52 q8 26-6 52z"/><path d="M210 78 q28 6 50-12 q-28-8-50 12z"/><path d="M256 50 q-6-22 6-40 q6 20-6 40z"/><path d="M256 50 q22 4 38-10 q-22-6-38 10z"/></svg>
+    </div>
+    <form id="form" novalidate>
+      <div class="f"><label for="nome">Seu nome</label><input id="nome" name="nome" autocomplete="name" placeholder="Como podemos te chamar" required></div>
+      <div class="f"><label for="data">Data da festa</label><input id="data" name="data" type="date" required></div>
+      <div class="f"><label for="conv">Convidados</label><input id="conv" name="conv" type="number" inputmode="numeric" min="1" placeholder="Ex.: 40"></div>
+      <div class="f"><label for="hora">Horário para buscar</label><input id="hora" name="hora" type="time"></div>
+      <fieldset class="f full"><legend>O que você quer</legend>
+        <div class="chips">
+          <label><input type="checkbox" name="itens" value="Bolo" checked>Bolo</label>
+          <label><input type="checkbox" name="itens" value="Salgados">Salgados</label>
+          <label><input type="checkbox" name="itens" value="Docinhos">Docinhos</label>
+          <label><input type="checkbox" name="itens" value="Tortinhas e bolo de pote">Tortinhas e bolo de pote</label>
+          <label><input type="checkbox" name="itens" value="Pães e folhados">Pães e folhados</label>
+        </div>
+      </fieldset>
+      <div class="f full"><label for="bolo">Bolo escolhido</label><input id="bolo" name="bolo" placeholder="Ex.: Chocolate com morango, 3 kg"></div>
+      <div class="f full"><label for="obs">Observações</label><textarea id="obs" name="obs" placeholder="Sabor, nome no bolo, quantidades, alguma alergia"></textarea></div>
+      <button class="btn btn-accent" type="submit">Enviar pelo WhatsApp <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <p class="form-note">O pedido só vale depois que a padaria confirmar com você no WhatsApp.</p>
+      <p class="ok" role="status">Seu pedido está pronto. Se o WhatsApp não abriu sozinho, <a id="waLink" href="#" target="_blank" rel="noopener">toque aqui para abrir</a> e é só enviar.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <img src="assets/logo.webp" alt="Trigo de Ouro do Jockey" width="480" height="301" loading="lazy">
+      <p>Padaria e confeitaria de bairro. Bolos de festa, doces, salgados e pães feitos todo dia.<br><span class="pendente" data-fill="endereco">Endereço da padaria</span></p>
+      <nav aria-label="Rodapé"><a href="#bolos">Bolos</a><a href="#calculadora">Calculadora</a><a href="#encomenda">Encomendar</a><a class="pendente" data-fill="instagram" href="#" rel="noopener">Instagram</a></nav>
+    </div>
+    <div class="fine"><span>© <span id="ano">2026</span> Trigo de Ouro do Jockey</span><span>Feito com carinho e muito trigo</span></div>
+  </div>
+</footer>
+
+<script>
+(() => {
+'use strict';
+/* ===== dados da padaria (preencher) ===== */
+const CONFIG = {
+  whatsapp: '',              // só números com DDI, ex.: 5521999999999
+  whatsTexto: '',            // ex.: (21) 99999-9999
+  endereco: 'Av. do Contorno, São Gonçalo, RJ',
+  horario: 'Das 6h às 19h',
+  instagram: '',             // ex.: https://instagram.com/trigodeouro
+  prazo: '3 dias'
+};
+const fill = (k, v, href) => document.querySelectorAll('[data-fill="'+k+'"]').forEach(el => { el.textContent = v; el.classList.remove('pendente'); if (href) el.href = href; });
+if (CONFIG.endereco) fill('endereco', CONFIG.endereco);
+if (CONFIG.horario) fill('horario', CONFIG.horario);
+if (CONFIG.prazo) fill('prazo', CONFIG.prazo);
+if (CONFIG.whatsTexto) fill('whats-texto', CONFIG.whatsTexto, 'https://wa.me/' + CONFIG.whatsapp);
+if (CONFIG.instagram) fill('instagram', 'Instagram', CONFIG.instagram);
+document.getElementById('ano').textContent = new Date().getFullYear();
+
+const $ = s => document.querySelector(s);
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const smoothstep = (p, e0, e1) => { const t = clamp((p - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
+const RM = matchMedia('(prefers-reduced-motion: reduce)');
+
+/* ===== divisão do texto ===== */
+function rng(seed){ let s = seed >>> 0; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+document.querySelectorAll('.split').forEach(el => {
+  const text = el.textContent.trim(), r = rng(+el.dataset.seed || 1);
+  const em = (el.dataset.em || '').split(',');
+  const words = text.split(' ');
+  el.textContent = '';
+  const sr = document.createElement('span'); sr.className = 'sr'; sr.textContent = text; el.appendChild(sr);
+  const vis = document.createElement('span'); vis.setAttribute('aria-hidden', 'true');
+  words.forEach((w, i) => {
+    const s = document.createElement('span'); s.className = 'w' + (em.includes(w) ? ' em' : ''); s.textContent = w;
+    s.style.setProperty('--th', (i / words.length * 0.42 + r() * 0.05).toFixed(3));
+    vis.appendChild(s); if (i < words.length - 1) vis.appendChild(document.createTextNode(' '));
+  });
+  el.appendChild(vis);
+});
+
+/* ===== hero de scrub ===== */
+const hero = $('#topo'), stage = $('#stage'), video = $('#hero'), ring = document.querySelector('.ring circle:last-child'), posterLayer = document.querySelector('.poster');
+const bands = [...document.querySelectorAll('.band')].map((el, i, all) => ({ el, a: +el.dataset.a, b: +el.dataset.b, ramp: +el.dataset.ramp || 0, first: i === 0, last: i === all.length - 1, op: -1, k: -1, on: null }));
+const VIDEO_URL = 'assets/hero-scrub.mp4', VIDEO_BYTES = 4248578;
+let target = 0, shown = 0, rafId = null, lastTick = 0, heroOnScreen = true, scrubOn = false, inited = false, loadK = 0, loadStart = 0;
+let seekBusy = false, pendingTime = null;
+
+function heroProgress(){ const r = hero.getBoundingClientRect(); const range = hero.offsetHeight - innerHeight; return range > 0 ? clamp(-r.top / range, 0, 1) : 0; }
+function requestSeek(t){ if (!video.duration) return; if (seekBusy) { pendingTime = t; return; } seekBusy = true; video.currentTime = t; }
+video.addEventListener('seeked', () => { seekBusy = false; if (pendingTime !== null) { const t = pendingTime; pendingTime = null; requestSeek(t); } });
+video.addEventListener('error', () => { seekBusy = false; pendingTime = null; failVideo(); });
+
+function updateCaptions(p){
+  bands.forEach(B => {
+    const { a, b } = B, f = Math.min(0.02, (b - a) / 3);
+    let op = (B.first ? 1 : smoothstep(p, a, a + f)) * (B.last ? 1 : 1 - smoothstep(p, b - f, b));
+    if (!B.first && p < a) op = 0;
+    let k = clamp((p - a) / (B.ramp || Math.min(0.025, (b - a) * 0.35)), 0, 1);
+    if (B.first) k = Math.max(k, loadK);
+    if (B.last && p >= b) k = 1;
+    op = Math.round(op * 1000) / 1000;
+    if (Math.abs(op - B.op) > 0.004 || (op === 0) !== (B.op === 0)) { B.el.style.opacity = op; B.op = op; }
+    if (Math.abs(k - B.k) > 0.008 || (k === 1 && B.k !== 1) || (k === 0 && B.k !== 0)) { B.el.style.setProperty('--k', k.toFixed(3)); B.k = k; }
+    const on = op > 0.5; if (on !== B.on) { B.el.classList.toggle('on', on); B.on = on; }
+  });
+  const sc = p > 0.02; if (sc !== stage._sc) { stage.classList.toggle('scrolled', sc); stage._sc = sc; }
+}
+function tick(now){
+  const dt = Math.min(100, now - (lastTick || now)); lastTick = now;
+  const k = 0.16; shown += (target - shown) * (1 - Math.pow(1 - k, dt / 16.667));
+  let busy = false;
+  if (loadK < 1) { loadK = clamp((now - loadStart) / 1100, 0, 1); loadK = 1 - Math.pow(1 - loadK, 3); busy = loadK < 1; }
+  if (Math.abs(target - shown) < 0.0005 && !busy) { shown = target; rafId = null; lastTick = 0; }
+  else rafId = requestAnimationFrame(tick);
+  requestSeek(shown * video.duration);
+  updateCaptions(shown);
+}
+function onScroll(){ target = heroProgress(); if (rafId === null && heroOnScreen) rafId = requestAnimationFrame(tick); }
+new IntersectionObserver(es => { heroOnScreen = es[0].isIntersecting; if (heroOnScreen && scrubOn) onScroll(); }).observe(hero);
+
+let started = false;
+function initHeroOnce(){
+  if (inited) return; inited = true;
+  posterLayer.style.backgroundImage = "url('assets/hero-poster.jpg'), url('assets/hero-ending.jpg')";
+  const img = new Image(); img.onload = startBlobFetch; img.onerror = startBlobFetch; img.src = 'assets/hero-poster.jpg';
+  setTimeout(startBlobFetch, 4000);
+}
+function startBlobFetch(){ if (started) return; started = true; loadHeroBlob().catch(failVideo); }
+async function loadHeroBlob(){
+  if (location.protocol === 'file:') throw new Error('file');
+  const ctrl = new AbortController(); let watchdog = setTimeout(() => ctrl.abort(), 20000);
+  const res = await fetch(VIDEO_URL, { priority: 'low', signal: ctrl.signal });
+  if (!res.ok) throw new Error('http ' + res.status);
+  const total = Number(res.headers.get('Content-Length')) || VIDEO_BYTES;
+  const reader = res.body.getReader(); const chunks = []; let got = 0, lastRing = 0;
+  for (;;) {
+    const { done, value } = await reader.read(); if (done) break;
+    clearTimeout(watchdog); watchdog = setTimeout(() => ctrl.abort(), 20000);
+    chunks.push(value); got += value.length;
+    const frac = Math.min(1, got / total), now = performance.now();
+    if (now - lastRing > 100 || frac === 1) { lastRing = now; ring.style.setProperty('--ld', Math.round(126 * (1 - frac))); }
+  }
+  clearTimeout(watchdog); ring.style.setProperty('--ld', 0);
+  video.src = URL.createObjectURL(new Blob(chunks, { type: res.headers.get('Content-Type') || 'video/mp4' })); video.load();
+  video.addEventListener('canplay', () => { requestSeek(heroProgress() * video.duration); stage.classList.add('video-ready'); }, { once: true });
+}
+function failVideo(){
+  stage.classList.add('video-failed');
+  const rg = document.querySelector('.ring'); if (rg) rg.style.display = 'none';
+  posterLayer.style.backgroundImage = "url('assets/hero-ending.jpg')";
+}
+
+const GATES = [
+  '(max-width: 720px)',
+  '(orientation: portrait) and (max-width: 1024px)',
+  '(orientation: portrait) and (pointer: coarse)',
+  '(orientation: landscape) and (pointer: coarse) and (max-height: 560px)',
+  '(prefers-reduced-motion: reduce)'
+];
+function enableScrub(){
+  if (scrubOn) return; scrubOn = true;
+  initHeroOnce();
+  if (!loadStart) loadStart = performance.now();
+  addEventListener('scroll', onScroll, { passive: true });
+  bands.forEach(B => { B.op = -1; B.k = -1; B.on = null; B.el.style.removeProperty('opacity'); });
+  unpinFinalStates();
+  updateCaptions(heroProgress());
+  onScroll();
+}
+function disableScrub(){
+  if (!scrubOn) { bands.forEach(B => { B.el.style.removeProperty('opacity'); B.el.style.setProperty('--k', 1); }); return; }
+  scrubOn = false;
+  removeEventListener('scroll', onScroll);
+  if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+  bands.forEach(B => { B.el.style.removeProperty('opacity'); B.el.style.setProperty('--k', 1); B.op = -1; B.k = -1; });
+}
+function applyHeroMode(){ if (GATES.some(q => matchMedia(q).matches)) disableScrub(); else enableScrub(); }
+const MQLS = GATES.map(q => matchMedia(q));
+MQLS.forEach(m => m.addEventListener('change', applyHeroMode));
+
+/* ===== entradas ===== */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) {
+    e.target.classList.add('in'); io.unobserve(e.target);
+    if (e.target.id === 'cakes') setTimeout(() => e.target.classList.add('done'), 1600);
+  }
+}), { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.io, .rv:not(.io .rv)').forEach(el => io.observe(el));
+document.querySelectorAll('.sprig path, .big-sprig path').forEach(p => { try { p.style.setProperty('--len', Math.ceil(p.getTotalLength()) + 1); } catch (e) {} });
+
+/* loops: pausa fora da tela e em aba escondida */
+const liveIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('off-screen', !e.isIntersecting)));
+document.querySelectorAll('.live').forEach(el => liveIO.observe(el));
+document.addEventListener('visibilitychange', () => document.body.classList.toggle('paused', document.hidden));
+
+/* nav sólida e botão flutuante */
+const nav = $('#nav'), order = $('#encomenda');
+let navSolid = null;
+function onPage(){
+  const heroEnd = hero.offsetTop + hero.offsetHeight - 80;
+  const s = scrollY > heroEnd || (!scrubOn && scrollY > 40); if (s !== navSolid) { nav.classList.toggle('solid', s); navSolid = s; }
+}
+addEventListener('scroll', onPage, { passive: true }); onPage();
+
+/* ===== calculadora: morangos caem no bolo ===== */
+const g = $('#g'), gOut = $('#gOut'), rS = $('#rS'), rB = $('#rB'), rD = $('#rD'), berriesG = $('#berries');
+const SPOTS = [[200,150],[150,160],[250,160],[110,172],[290,172],[175,182],[225,182],[135,190],[265,190],[200,194],[90,184],[310,184]];
+const NS = 'http://www.w3.org/2000/svg';
+const berries = SPOTS.map(([x, y], i) => {
+  const gEl = document.createElementNS(NS, 'g'); gEl.setAttribute('class', 'berry off');
+  gEl.innerHTML = `<g transform="translate(${x} ${y})"><path d="M0 -26 C18 -26 22 -10 16 2 C11 12 4 18 0 20 C-4 18 -11 12 -16 2 C-22 -10 -18 -26 0 -26Z" fill="#d42a2a"/><path d="M-8 -14 C-6 -18 -2 -19 2 -18" stroke="#ff8a80" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/><g fill="#f5d36b"><circle cx="-6" cy="-6" r="1.3"/><circle cx="5" cy="-10" r="1.3"/><circle cx="7" cy="2" r="1.3"/><circle cx="-4" cy="6" r="1.3"/><circle cx="0" cy="-2" r="1.3"/></g><path d="M0 -26 L-12 -34 L-4 -28 L0 -38 L4 -28 L12 -34 Z" fill="#3f8a3a"/></g>`;
+  gEl.style.transitionDelay = '0s'; berriesG.appendChild(gEl); return gEl;
+});
+let shownBerries = -1;
+function calc(){
+  const n = +g.value;
+  gOut.textContent = n;
+  g.style.setProperty('--fill', ((n - g.min) / (g.max - g.min) * 100) + '%');
+  rS.textContent = (n * 10).toLocaleString('pt-BR');
+  const kg = Math.max(1, Math.round(n * 0.1 * 2) / 2);
+  rB.textContent = kg.toLocaleString('pt-BR') + ' kg';
+  rD.textContent = (n * 4).toLocaleString('pt-BR');
+  const count = clamp(Math.round(n / 12.5), 1, SPOTS.length);
+  if (count !== shownBerries) {
+    berries.forEach((b, i) => { const on = i < count; b.style.transitionDelay = on && i >= shownBerries ? ((i - Math.max(shownBerries, 0)) * 0.07) + 's' : '0s'; b.classList.toggle('off', !on); });
+    shownBerries = count;
+  }
+}
+g.addEventListener('input', calc);
+const calcIO = new IntersectionObserver(es => { if (es[0].isIntersecting) { calc(); calcIO.disconnect(); } }, { threshold: 0.3 });
+calcIO.observe($('#cakeSvg'));
+$('#useCalc').addEventListener('click', () => {
+  const n = +g.value; $('#conv').value = n;
+  const s = $('input[name=itens][value="Salgados"]'), d = $('input[name=itens][value="Docinhos"]'); s.checked = true; d.checked = true;
+  const note = `Pela calculadora: ${n * 10} salgados, ${rB.textContent} de bolo e ${n * 4} docinhos.`;
+  const obs = $('#obs'); if (!obs.value.includes('Pela calculadora')) obs.value = (note + (obs.value ? '\n' + obs.value : ''));
+});
+
+/* escolher bolo */
+document.querySelectorAll('.pick').forEach(b => b.addEventListener('click', () => {
+  $('#bolo').value = b.dataset.cake; $('input[name=itens][value="Bolo"]').checked = true;
+  order.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth' });
+  setTimeout(() => $('#nome').focus({ preventScroll: true }), RM.matches ? 0 : 700);
+}));
+
+/* ===== formulário: abre o WhatsApp com o pedido ===== */
+const form = $('#form');
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const nome = $('#nome'), data = $('#data');
+  if (!nome.value.trim()) { nome.focus(); nome.setCustomValidity('Escreva seu nome'); nome.reportValidity(); nome.setCustomValidity(''); return; }
+  if (!data.value) { data.focus(); data.reportValidity(); return; }
+  const itens = [...form.querySelectorAll('input[name=itens]:checked')].map(i => i.value).join(', ') || 'a combinar';
+  const dt = data.value.split('-').reverse().join('/');
+  const linhas = [
+    'Olá, Trigo de Ouro! Quero fazer uma encomenda.',
+    '', '*Nome:* ' + nome.value.trim(), '*Data da festa:* ' + dt,
+    $('#hora').value ? '*Horário para buscar:* ' + $('#hora').value : '',
+    $('#conv').value ? '*Convidados:* ' + $('#conv').value : '',
+    '*Quero:* ' + itens,
+    $('#bolo').value.trim() ? '*Bolo:* ' + $('#bolo').value.trim() : '',
+    $('#obs').value.trim() ? '*Observações:* ' + $('#obs').value.trim() : ''
+  ].filter(Boolean).join('\n');
+  const url = 'https://wa.me/' + (CONFIG.whatsapp || '') + '?text=' + encodeURIComponent(linhas);
+  $('#waLink').href = url;
+  form.classList.add('sent');
+  try { window.open(url, '_blank', 'noopener'); } catch (err) {}
+});
+
+/* ===== movimento reduzido ao vivo ===== */
+function pinToFinalStates(){
+  document.querySelectorAll('.io, .rv').forEach(el => el.classList.add('in'));
+  calc();
+}
+function unpinFinalStates(){ /* as entradas já tocadas ficam; os motores de scroll voltam a comandar o hero */ }
+RM.addEventListener('change', e => { if (e.matches) pinToFinalStates(); else applyHeroMode(); });
+if (RM.matches) pinToFinalStates();
+
+applyHeroMode();
+})();
+</script>
+</body>
+</html>
